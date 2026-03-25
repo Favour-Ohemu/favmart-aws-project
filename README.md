@@ -26,34 +26,34 @@
 
 ## Architecture Decisions
 
-**Why ALB and not NLB?**  
+**Why ALB and not NLB:**  
 The Application Load Balancer operates at Layer 7 (HTTP) and supports
 features like path-based routing and sticky sessions. NLB operates at
 Layer 4 (TCP) and is faster but lacks HTTP level capabilities. Since
 FavMart serves web traffic, ALB provides the functionality needed for
 routing and session handling.
 
-**Why ElastiCache Redis for sessions?**  
+**Why ElastiCache Redis for sessions:**  
 Without a shared session store, a user who logs in on one EC2 instance
 could appear logged out when the next request is routed to a different
 instance. Redis provides a centralized session store so all instances
 can access the same session data, allowing the application layer to
 remain stateless.
 
-**Why private subnets for EC2?**  
+**Why private subnets for EC2:**  
 EC2 instances run in private subnets and have no public IP addresses,
 which prevents direct access from the internet. All incoming traffic
 passes through the Application Load Balancer, providing a controlled
 and secure entry point to the application.
 
-**Why EFS and not EBS?**  
+**Why EFS and not EBS:**  
 EBS volumes attach to a single EC2 instance. In an auto-scaling
 environment, new instances would not have access to files stored on
 another instance. EFS can be mounted by multiple instances
 simultaneously, allowing all application servers to access the same
 shared file system.
 
-**Why RDS MySQL and not Aurora?**  
+**Why RDS MySQL and not Aurora:**  
 Aurora does not offer a Free Tier eligible instance size. RDS MySQL on
 db.t3.micro is a suitable option for development and learning
 environments. Aurora would be a potential production upgrade for higher
@@ -119,6 +119,7 @@ Adding the outbound rule immediately resolved the issue and the target group bec
 
 ##  Proof of work
 Screenshots of every phase are available in docs/screenshots/ from VPC creation to the live application, which loads via the ALB DNS name.
+
 ---
 
 *Built as part of my AWS Solutions Architect Associate exam preparation*
