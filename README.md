@@ -33,6 +33,9 @@ Layer 4 (TCP) and is faster but lacks HTTP level capabilities. Since
 FavMart serves web traffic, ALB provides the functionality needed for
 routing and session handling.
 
+![Application Load Balancer](docs//screenshots/alb-active.png)
+
+
 **Why ElastiCache Redis for sessions:**  
 Without a shared session store, a user who logs in on one EC2 instance
 could appear logged out when the next request is routed to a different
@@ -40,11 +43,15 @@ instance. Redis provides a centralized session store so all instances
 can access the same session data, allowing the application layer to
 remain stateless.
 
+![ElastiCache Redis](docs/screenshots/elasticache-redis.png)
+
 **Why private subnets for EC2:**  
 EC2 instances run in private subnets and have no public IP addresses,
 which prevents direct access from the internet. All incoming traffic
 passes through the Application Load Balancer, providing a controlled
 and secure entry point to the application.
+
+![Public and Private Subnets](docs/screenshots/subnets.png)
 
 **Why EFS and not EBS:**  
 EBS volumes attach to a single EC2 instance. In an auto-scaling
@@ -53,12 +60,15 @@ another instance. EFS can be mounted by multiple instances
 simultaneously, allowing all application servers to access the same
 shared file system.
 
+![Elastic File System](docs/screenshots/efs-created.png)
+
 **Why RDS MySQL and not Aurora:**  
 Aurora does not offer a Free Tier eligible instance size. RDS MySQL on
 db.t3.micro is a suitable option for development and learning
 environments. Aurora would be a potential production upgrade for higher
 performance and advanced replication capabilities.
 
+![RDS MySQL](docs/screenshots/rds-mysql.png)
 
 ## Traffic Flow
 
@@ -102,6 +112,9 @@ The load balancer could receive requests from users but had no rule allowing it 
 
 Adding the outbound rule immediately resolved the issue and the target group became healthy.
 
+![ALB DNS working](docs/screenshots/favmart-via-alb.png)
+![ALB DNS working](docs/screenshots/favmart-via-alb-2.png)
+
 
 ## How to Rebuild
 
@@ -118,7 +131,7 @@ Adding the outbound rule immediately resolved the issue and the target group bec
 
 
 ##  Proof of work
-Screenshots of every phase are available in docs/screenshots/ from VPC creation to the live application, which loads via the ALB DNS name.
+Screenshots of every phase are available in docs/screenshots/ - from VPC creation to the live application, which loads via the ALB DNS name.
 
 ---
 
