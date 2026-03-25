@@ -1,12 +1,14 @@
 #  FavMart - AWS Solutions Architect Associate  Project
 >A highly available, auto-scaling, multi-tier e-commerce infrastructure built on the AWS Free Tier, designed to demonstrate AWS architecture across networking, compute, data, and security layers.
 
+---
+
 
 ## Architecture Diagram
 
 ![FavMart AWS Architecture](docs/architecture-diagram.png)
 
-
+---
 ## AWS Services Used
 
 | Service | Purpose |
@@ -23,6 +25,7 @@
 | **Elastic Beanstalk** | Separate managed environment used for staging deployments |
 | **NAT Gateway** | Allows private instances to access the internet for updates and package installation |
 
+---
 
 ## Architecture Decisions
 
@@ -33,7 +36,8 @@ Layer 4 (TCP) and is faster but lacks HTTP level capabilities. Since
 FavMart serves web traffic, ALB provides the functionality needed for
 routing and session handling.
 
-![Application Load Balancer](docs//screenshots/alb-active.png)
+![Application Load Balancer](docs//screenshots/alb-active.png)  
+
 
 
 **Why ElastiCache Redis for sessions:**  
@@ -43,7 +47,8 @@ instance. Redis provides a centralized session store so all instances
 can access the same session data, allowing the application layer to
 remain stateless.
 
-![ElastiCache Redis](docs/screenshots/elasticache-redis.png)
+![ElastiCache Redis](docs/screenshots/elasticache-redis.png)  
+
 
 **Why private subnets for EC2:**  
 EC2 instances run in private subnets and have no public IP addresses,
@@ -51,7 +56,8 @@ which prevents direct access from the internet. All incoming traffic
 passes through the Application Load Balancer, providing a controlled
 and secure entry point to the application.
 
-![Public and Private Subnets](docs/screenshots/subnets.png)
+![Public and Private Subnets](docs/screenshots/subnets.png)  
+
 
 **Why EFS and not EBS:**  
 EBS volumes attach to a single EC2 instance. In an auto-scaling
@@ -60,7 +66,8 @@ another instance. EFS can be mounted by multiple instances
 simultaneously, allowing all application servers to access the same
 shared file system.
 
-![Elastic File System](docs/screenshots/efs-created.png)
+![Elastic File System](docs/screenshots/efs-created.png)  
+
 
 **Why RDS MySQL and not Aurora:**  
 Aurora does not offer a Free Tier eligible instance size. RDS MySQL on
@@ -68,7 +75,10 @@ db.t3.micro is a suitable option for development and learning
 environments. Aurora would be a potential production upgrade for higher
 performance and advanced replication capabilities.
 
-![RDS MySQL](docs/screenshots/rds-mysql.png)
+![RDS MySQL](docs/screenshots/rds-mysql.png)  
+
+---
+
 
 ## Traffic Flow
 
@@ -84,6 +94,7 @@ Application interacts with:
 
 Response returns to the user through the ALB
 ```
+---
 
 ##  Security Architecture
 
@@ -101,6 +112,8 @@ Redis Security Group (6379 from app servers)
 Only the Application Load Balancer is exposed to the internet.
 All other services accept traffic only from the specific resources that require access.
 
+---
+
 
 ## Problem Encountered
 
@@ -115,6 +128,8 @@ Adding the outbound rule immediately resolved the issue and the target group bec
 ![ALB DNS working](docs/screenshots/favmart-via-alb.png)
 ![ALB DNS working](docs/screenshots/favmart-via-alb-2.png)
 
+---
+
 
 ## How to Rebuild
 
@@ -128,6 +143,8 @@ Adding the outbound rule immediately resolved the issue and the target group bec
 8. Create an Application Load Balancer, Target Group, Launch Template, and Auto Scaling Group.
 9. Configure Route 53 health checks pointing to the ALB.
 10. Deploy a staging environment using Elastic Beanstalk.
+
+---
 
 
 ##  Proof of work
